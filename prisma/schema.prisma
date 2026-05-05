@@ -1,0 +1,92 @@
+// Schema de Prisma para Ahorr-E
+// Mapea sobre PostgreSQL provisto por Supabase.
+// Modelos mínimos para feature/setup-base: Profile, Budget, Expense, ScrapedPrice.
+// Modelos adicionales (PurchaseHistory, PurchaseRecommendation, ChatMessage)
+// se agregarán en sus respectivas features.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // Requerido en proyectos NANO/free de Supabase: DATABASE_URL apunta al
+  // Transaction pooler (6543) y DIRECT_URL al Session pooler (5432) para migraciones.
+  directUrl = env("DIRECT_URL")
+}
+
+/// Perfil de usuario. El `id` es el UUID emitido por Supabase Auth (auth.users.id).
+/// Las políticas RLS deben filtrar por `id = auth.uid()`.
+model Profile {
+  id        String   @id @db.Uuid
+  email     String   @unique
+  fullName  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  budgets  Budget[]
+  expenses Expense[]
+
+  @@map("profiles")
+}
+
+/// RF1 — Presupuesto del usuario para un período (mes).
+/// Un Expense solo puede registrarse si existe un Budget activo para ese período.
+model Budget {
+  id          String    @id @default(uuid()) @db.Uuid
+  profileId   String    @db.Uuid
+  amount      Decimal   @db.Decimal(12, 2) // CLP, sin decimales reales pero margen
+  periodStart DateTime  @db.Date
+  periodEnd   DateTime  @db.Date
+  category    String?   // categoría opcional (alimentación, transporte, etc.)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  profile  Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  expenses Expense[]
+
+  @@index([profileId, periodStart])
+  @@map("budgets")
+}
+
+/// RF1, RF5 — Gasto registrado por el usuario, asociado a un presupuesto.
+model Expense {
+  id          String   @id @default(uuid()) @db.Uuid
+  profileId   String   @db.Uuid
+  budgetId    String   @db.Uuid
+  amount      Decimal  @db.Decimal(12, 2)
+  description String
+  spentAt     DateTime
+  source      ExpenseSource @default(MANUAL)
+  createdAt   DateTime @default(now())
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  budget  Budget  @relation(fields: [budgetId], references: [id], onDelete: Restrict)
+
+  @@index([profileId, spentAt])
+  @@map("expenses")
+}
+
+/// Origen del gasto: ingresado a mano o derivado de una compra hecha desde Ahorr-E.
+enum ExpenseSource {
+  MANUAL
+  AHORRE_PURCHASE
+}
+
+/// RF2, RF6 — Caché de precios scrapeados de retailers externos.
+/// TTL recomendado: 24h. El cron de refresco actualiza `scrapedAt`.
+model ScrapedPrice {
+  id            String   @id @default(uuid()) @db.Uuid
+  productName   String
+  productSku    String?
+  retailer      String   // "Falabella", "Jumbo", etc.
+  price         Decimal  @db.Decimal(12, 2)
+  originalPrice Decimal? @db.Decimal(12, 2) // RF4: precio de lista para comparar
+  url           String
+  scrapedAt     DateTime @default(now())
+
+  @@index([productName])
+  @@index([retailer, scrapedAt])
+  @@map("scraped_prices")
+}
