@@ -1,0 +1,43 @@
+================================================================
+Ahorr-E — Repositorios del proyecto
+DSY1106 Desarrollo Fullstack III · Duoc UC
+Equipo: Marco Tassara · Martín Villegas · Jael Lisboa
+================================================================
+
+REPOSITORIO PRINCIPAL (monorepo)
+--------------------------------
+URL:        https://github.com/YjaelBelenLisboaMardones/Ahorr-e_proyecto
+Contenido:  Aplicación completa Ahorr-E. Monorepo con cuatro componentes
+            desplegables de forma independiente:
+
+            - Frontend (NPM, Next.js + React + Tailwind)
+              Ruta: app/(app)/ y app/(auth)/
+
+            - BFF (Next.js API Routes + Server Actions)
+              Ruta: app/api/ y app/(app)/**/actions.ts
+
+            - Microservicio Scraping (RF2)
+              Ruta: services/scraper/ + app/api/scraper/
+
+            - Microservicio IA (RF3 + RF6)
+              Ruta: services/ai/ + app/api/ai/recomendar/
+
+Instrucciones de uso:  README.md en la raíz del repo.
+Documentación técnica: carpeta docs/
+
+NOTA SOBRE LA ESTRATEGIA DE REPOSITORIOS
+----------------------------------------
+Se optó por monorepo con sub-componentes desacoplados (en lugar de
+un repositorio por componente). Justificación:
+
+  1. Equipo de tres integrantes: un solo punto de versionado simplifica
+     coordinación y revisión de pull requests.
+
+  2. Vercel permite mapear cada microservicio a un proyecto independiente
+     desde la misma URL del repo (multi-deploy desde monorepo), preservando
+     la independencia de despliegue exigida por la arquitectura serverless.
+
+  3. Las dependencias compartidas (tipos, helpers de formato, cliente de
+     Prisma) se reutilizan sin necesidad de publicar paquetes NPM internos.
+
+================================================================
