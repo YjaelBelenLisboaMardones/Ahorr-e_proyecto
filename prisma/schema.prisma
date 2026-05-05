@@ -9,11 +9,11 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  // Descomenta si DATABASE_URL apunta al pooler de Supabase (puerto 6543).
-  // DIRECT_URL debe apuntar al puerto 5432 directo y se usa para migraciones.
-  // directUrl = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // Requerido en proyectos NANO/free de Supabase: DATABASE_URL apunta al
+  // Transaction pooler (6543) y DIRECT_URL al Session pooler (5432) para migraciones.
+  directUrl = env("DIRECT_URL")
 }
 
 /// Perfil de usuario. El `id` es el UUID emitido por Supabase Auth (auth.users.id).
