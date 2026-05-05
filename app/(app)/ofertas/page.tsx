@@ -2,6 +2,7 @@ import { requireUser } from "@/lib/supabase/auth";
 import { searchProducts } from "@/services/scraper/search-products";
 import { formatCLP, formatFecha } from "@/lib/format";
 import { SearchForm } from "./search-form";
+import { RecommendButton } from "./recommend-button";
 
 export default async function OfertasPage({
   searchParams,
@@ -25,6 +26,8 @@ export default async function OfertasPage({
       {result && (
         <SourceBadge source={result.source} count={result.products.length} />
       )}
+
+      {result && result.products.length > 0 && <RecommendButton query={query} />}
 
       {!result && (
         <p className="rounded-2xl bg-white p-4 text-sm text-zinc-500 shadow-sm dark:bg-zinc-900 dark:text-zinc-400">
