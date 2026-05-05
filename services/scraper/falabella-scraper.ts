@@ -108,40 +108,80 @@ export class FalabellaScraper implements Scraper {
 
   /**
    * Mock determinístico para demos sin red. Activable con `SCRAPER_MOCK=true`.
-   * Devuelve resultados verosímiles que cambian según el query.
+   *
+   * Whitelist de productos reconocidos. Si la query no matchea ningún término
+   * de la whitelist, devuelve []. Esto permite demostrar en vivo el RF3:
+   * con una query absurda, el cache-aside no encuentra productos y la IA
+   * responde "No tengo datos para recomendar" — comportamiento de grounding
+   * estricto, que es lo que el informe técnico promete.
    */
   private mock(query: string): ScrapedProduct[] {
     const q = query.toLowerCase().trim();
+    const matched = MOCK_WHITELIST.find((entry) =>
+      entry.keywords.some((k) => q.includes(k)),
+    );
+    if (!matched) return [];
+
     const seed = q.length;
-    return [
-      {
-        productName: `${capitalize(q)} 1.5L (mock)`,
-        productSku: `MOCK-${seed}-A`,
-        retailer: this.retailer,
-        price: 1490 + seed * 10,
-        originalPrice: 1990 + seed * 10,
-        url: `https://www.falabella.com/falabella-cl/search?Ntt=${encodeURIComponent(q)}`,
-      },
-      {
-        productName: `${capitalize(q)} pack 6un (mock)`,
-        productSku: `MOCK-${seed}-B`,
-        retailer: this.retailer,
-        price: 4990 + seed * 50,
-        originalPrice: 6490 + seed * 50,
-        url: `https://www.falabella.com/falabella-cl/search?Ntt=${encodeURIComponent(q)}`,
-      },
-      {
-        productName: `${capitalize(q)} versión light (mock)`,
-        productSku: `MOCK-${seed}-C`,
-        retailer: this.retailer,
-        price: 1290 + seed * 5,
-        originalPrice: null,
-        url: `https://www.falabella.com/falabella-cl/search?Ntt=${encodeURIComponent(q)}`,
-      },
-    ];
+    return matched.products.map((p, i) => ({
+      ...p,
+      productSku: `MOCK-${matched.id}-${i}`,
+      retailer: this.retailer,
+      url: `https://www.falabella.com/falabella-cl/search?Ntt=${encodeURIComponent(q)}`,
+      price: p.price + seed,
+    }));
   }
 }
 
-function capitalize(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
+type MockEntry = {
+  id: string;
+  keywords: string[];
+  products: Array<Pick<ScrapedProduct, "productName" | "price" | "originalPrice">>;
+};
+
+const MOCK_WHITELIST: MockEntry[] = [
+  {
+    id: "fanta",
+    keywords: ["fanta", "naranja"],
+    products: [
+      { productName: "Fanta Naranja 1.5L (mock)", price: 1490, originalPrice: 1990 },
+      { productName: "Fanta Naranja pack 6un 350ml (mock)", price: 4290, originalPrice: 5790 },
+      { productName: "Fanta Zero 1.5L (mock)", price: 1390, originalPrice: null },
+    ],
+  },
+  {
+    id: "coca",
+    keywords: ["coca", "coca-cola", "cocacola", "bebida"],
+    products: [
+      { productName: "Coca-Cola 1.5L (mock)", price: 1690, originalPrice: 2190 },
+      { productName: "Coca-Cola pack 6un 350ml (mock)", price: 4990, originalPrice: 6490 },
+      { productName: "Coca-Cola Zero 2L (mock)", price: 2090, originalPrice: 2590 },
+    ],
+  },
+  {
+    id: "leche",
+    keywords: ["leche", "soprole", "colun"],
+    products: [
+      { productName: "Leche Soprole entera 1L (mock)", price: 1190, originalPrice: 1490 },
+      { productName: "Leche Colun descremada 1L (mock)", price: 1090, originalPrice: 1390 },
+      { productName: "Leche Soprole pack 6un (mock)", price: 5990, originalPrice: 7490 },
+    ],
+  },
+  {
+    id: "pan",
+    keywords: ["pan", "marraqueta", "hallulla"],
+    products: [
+      { productName: "Pan marraqueta 1kg (mock)", price: 2290, originalPrice: null },
+      { productName: "Pan hallulla 1kg (mock)", price: 2490, originalPrice: 2990 },
+      { productName: "Pan molde integral 500g (mock)", price: 1890, originalPrice: 2290 },
+    ],
+  },
+  {
+    id: "arroz",
+    keywords: ["arroz", "tucapel"],
+    products: [
+      { productName: "Arroz Tucapel grado 1 1kg (mock)", price: 1590, originalPrice: 1990 },
+      { productName: "Arroz integral 1kg (mock)", price: 1990, originalPrice: 2490 },
+    ],
+  },
+];
