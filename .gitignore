@@ -27,6 +27,7 @@ Thumbs.db
 
 # project docs (not versioned in repo — kept locally for reference)
 *.docx
+*.pdf
 .docx_extract/
 
 # debug
