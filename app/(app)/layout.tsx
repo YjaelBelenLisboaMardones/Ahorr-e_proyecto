@@ -23,6 +23,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             >
               Presupuestos
             </Link>
+            <Link
+              href="/gastos"
+              className="text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-50"
+            >
+              Gastos
+            </Link>
             <form action={logoutAction}>
               <button
                 type="submit"
