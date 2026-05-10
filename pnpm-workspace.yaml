@@ -1,0 +1,49 @@
+# pnpm Workspace Configuration — Ahorr-E Monorepo
+# ═════════════════════════════════════════════════════════════════════════════
+# Propósito: Define los límites de la topología del monorepo bajo PNPM Workspaces.
+# Garantiza aislamiento de dependencias e inyección de versiones compartidas exclusivamente
+# en niveles de compatibilidad semántica estricta (SemVer).
+#
+# Principio Arquitectónico: Loose Coupling - Cada workspace es un dominio autónomo con
+# sus propias node_modules, pero la raíz ejecuta orchestration scripts (build, test, dev).
+# ═════════════════════════════════════════════════════════════════════════════
+
+packages:
+  # ─────────────────────────────────────────────────────────────────────────
+  # CAPA DE APLICACIÓN: BFF + Gateway + Frontend
+  # ─────────────────────────────────────────────────────────────────────────
+  # El `app` es la única interfaz pública: Next.js 16 App Router con Edge Runtime.
+  # Responsabilidades: orquestación de APIs, renderizado, autenticación (Supabase).
+  # RNF4 (Mobile-first), RNF1 (RLS via Supabase Auth).
+  - 'app'
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # CAPA DE SERVICIOS: Microservicios Serverless (Edge Runtime Compatible)
+  # ─────────────────────────────────────────────────────────────────────────
+  # Cada servicio es un dominio funcional completamente desacoplado.
+  # Variables de entorno locales (.env.services.scraper, etc.) garantizan autonomía.
+  # Comunicación: exclusivamente vía HTTP/gRPC (sin importación de código).
+
+  # Scraper: Integración Falabella, caché de productos (RF2)
+  - 'services/scraper'
+
+  # AI: Recomendaciones con Gemini, grounding automático (RF3)
+  - 'services/ai'
+
+  # Budget: Gestión de presupuestos y gastos, Row-Level Security (RF1, RNF1)
+  - 'services/budget'
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # CAPA DE ESQUEMAS: Tipos Compartidos (Trazabilidad, NO Acoplamiento)
+  # ─────────────────────────────────────────────────────────────────────────
+  # REGLA ESTRICTA: Solo TypeScript types/interfaces, sin lógica de negocio.
+  # Cada tipo está comentado con su RF/RNF justificador.
+  # Evita: funciones, clases, utilidades — eso fragmenta servicios.
+
+  - 'packages/schemas'
+allowBuilds:
+  '@prisma/client': true
+  '@prisma/engines': true
+  prisma: true
+  sharp: true
+  unrs-resolver: true

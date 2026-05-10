@@ -1,31 +1,18 @@
-import { defineConfig } from "vitest/config";
-import path from "node:path";
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./"),
-      "server-only": path.resolve(__dirname, "tests/server-only-stub.ts"),
-    },
-  },
   test: {
-    environment: "node",
-    include: ["**/*.test.ts"],
-    exclude: ["node_modules/**", ".next/**"],
-    coverage: {
-      provider: "v8",
-      reporter: ["text", "html", "json-summary"],
-      include: [
-        "lib/**/*.ts",
-        "services/**/*.ts",
-      ],
-      exclude: [
-        "**/*.test.ts",
-        "**/index.ts",
-        "lib/prisma.ts",
-        "lib/supabase/**",
-        "services/auth/profile-repository.ts",
-      ],
+    // 1. Forzamos el entorno Edge para cumplir con el RNF2
+    environment: 'edge-runtime', 
+    globals: true,
+  },
+  resolve: {
+    // Usamos alias relativos simples. Vitest los resuelve desde la raíz del workspace.
+    alias: {
+      '@': '/',
+      '@app': '/app',
+      '@services': '/services',
+      '@shared': '/packages/shared-types'
     },
   },
 });
