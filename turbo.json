@@ -1,0 +1,31 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "globalEnv": [
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "DATABASE_URL",
+    "DIRECT_URL",
+    "GEMINI_API_KEY",
+    "SUPABASE_STORAGE_MEDIA_BUCKET",
+    "NEXT_PUBLIC_AUTH_API_URL",
+    "NEXT_PUBLIC_FINANCE_API_URL",
+    "NEXT_PUBLIC_OFFERS_API_URL",
+    "SCRAPER_MOCK",
+    "ML_CLIENT_ID",
+    "ML_CLIENT_SECRET"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "dev": { "cache": false, "persistent": true },
+    "lint": { "dependsOn": ["^lint"] },
+    "typecheck": { "dependsOn": ["^typecheck"] },
+    "test": { "dependsOn": ["^build"], "cache": false },
+    "prisma:generate": { "cache": false }
+  }
+}
