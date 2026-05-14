@@ -16,8 +16,8 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-/// Perfil de usuario. El id es el UUID emitido por Supabase Auth (auth.users.id).
-/// Las políticas RLS deben filtrar por id = auth.uid().
+/// Perfil de usuario. El `id` es el UUID emitido por Supabase Auth (auth.users.id).
+/// Las políticas RLS deben filtrar por `id = auth.uid()`.
 model Profile {
   id        String   @id @db.Uuid
   email     String   @unique
@@ -75,7 +75,7 @@ enum ExpenseSource {
 }
 
 /// RF2, RF6 — Caché de precios scrapeados de retailers externos.
-/// TTL recomendado: 24h. El cron de refresco actualiza scrapedAt.
+/// TTL recomendado: 24h. El cron de refresco actualiza `scrapedAt`.
 model ScrapedPrice {
   id            String   @id @default(uuid()) @db.Uuid
   productName   String

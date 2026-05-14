@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { requireUser } from "@/lib/supabase/auth";
+import { requireUser } from "@/app/lib/supabase/auth";
 import { createExpense, deleteExpense } from "@/services/budget/expense-repository";
 import { evaluatePurchase } from "@/services/budget/budget-status";
 

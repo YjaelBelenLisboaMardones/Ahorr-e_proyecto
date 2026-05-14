@@ -1,6 +1,6 @@
 import "server-only";
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/app/lib/prisma";
 import type { Expense, ExpenseSource } from "@prisma/client";
 
 /**

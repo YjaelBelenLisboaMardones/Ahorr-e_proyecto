@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { requireUser } from "@/lib/supabase/auth";
+import { requireUser } from "@/app/lib/supabase/auth";
 import { findExpenseById } from "@/services/budget/expense-repository";
-import { formatCLP, formatFecha } from "@/lib/format";
+import { formatCLP, formatFecha } from "@/app/lib/format";
 import { deleteExpenseAction } from "../actions";
 
 export default async function GastoDetallePage({

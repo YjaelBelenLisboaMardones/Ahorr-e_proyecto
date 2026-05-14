@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { requireUser } from "@/lib/supabase/auth";
+import { requireUser } from "@/app/lib/supabase/auth";
 import { listExpensesByProfile } from "@/services/budget/expense-repository";
 import { listBudgetsByProfile } from "@/services/budget/budget-repository";
-import { formatCLP, formatFecha } from "@/lib/format";
+import { formatCLP, formatFecha } from "@/app/lib/format";
 
 export default async function GastosPage() {
   const user = await requireUser();

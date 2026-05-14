@@ -1,5 +1,5 @@
 -- =====================================================================
--- Ahorr-E — Row Level Security para public.profiles
+-- Ahorr-E — Row Level Security para `public.profiles`
 -- Cumple RNF1 (aislamiento) y RNF3 (seguridad) del informe técnico.
 -- Ejecutar UNA sola vez en el SQL Editor del dashboard de Supabase
 -- después del script 01_profiles_trigger.sql.

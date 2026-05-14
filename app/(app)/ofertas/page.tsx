@@ -1,6 +1,6 @@
-import { requireUser } from "@/lib/supabase/auth";
+import { requireUser } from "@/app/lib/supabase/auth";
 import { searchProducts } from "@/services/scraper/search-products";
-import { formatCLP, formatFecha } from "@/lib/format";
+import { formatCLP, formatFecha } from "@/app/lib/format";
 import { SearchForm } from "./search-form";
 import { RecommendButton } from "./recommend-button";
 

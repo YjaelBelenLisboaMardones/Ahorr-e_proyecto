@@ -1,5 +1,5 @@
 -- =====================================================================
--- Ahorr-E — Row Level Security para public.budgets
+-- Ahorr-E — Row Level Security para `public.budgets`
 -- Cumple RNF1 y RNF3: cada usuario solo accede a sus propios presupuestos.
 -- Ejecutar UNA sola vez en el SQL Editor de Supabase.
 -- =====================================================================

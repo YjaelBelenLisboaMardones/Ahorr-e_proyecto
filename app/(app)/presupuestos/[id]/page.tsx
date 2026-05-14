@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { requireUser } from "@/lib/supabase/auth";
+import { requireUser } from "@/app/lib/supabase/auth";
 import { findBudgetById } from "@/services/budget/budget-repository";
 import { listExpensesByBudget } from "@/services/budget/expense-repository";
 import { getBudgetStatus } from "@/services/budget/budget-status";
-import { formatCLP, formatFecha, toDateInputValue } from "@/lib/format";
+import { formatCLP, formatFecha, toDateInputValue } from "@/app/lib/format";
 import { EditBudgetForm } from "./edit-form";
 import { deleteBudgetAction } from "../actions";
 

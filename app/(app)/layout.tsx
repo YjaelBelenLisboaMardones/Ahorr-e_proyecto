@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { requireUser } from "@/lib/supabase/auth";
+import { requireUser } from "@/app/lib/supabase/auth";
 import { logoutAction } from "../(auth)/actions";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {

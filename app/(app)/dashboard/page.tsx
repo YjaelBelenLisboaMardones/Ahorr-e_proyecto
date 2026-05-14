@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { requireUser } from "@/lib/supabase/auth";
+import { requireUser } from "@/app/lib/supabase/auth";
 import { findProfileById } from "@/services/auth/profile-repository";
 import { listBudgetsByProfile } from "@/services/budget/budget-repository";
 import { listExpensesByProfile } from "@/services/budget/expense-repository";
-import { formatCLP } from "@/lib/format";
+import { formatCLP } from "@/app/lib/format";
 
 export default async function DashboardPage() {
   const user = await requireUser();

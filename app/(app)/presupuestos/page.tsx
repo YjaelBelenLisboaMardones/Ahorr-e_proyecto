@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { requireUser } from "@/lib/supabase/auth";
+import { requireUser } from "@/app/lib/supabase/auth";
 import { listBudgetsByProfile } from "@/services/budget/budget-repository";
-import { formatCLP, formatFecha } from "@/lib/format";
+import { formatCLP, formatFecha } from "@/app/lib/format";
 
 export default async function PresupuestosPage() {
   const user = await requireUser();

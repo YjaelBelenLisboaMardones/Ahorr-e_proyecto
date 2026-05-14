@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { requireUser } from "@/lib/supabase/auth";
+import { requireUser } from "@/app/lib/supabase/auth";
 import { listBudgetsByProfile } from "@/services/budget/budget-repository";
 import { sumExpensesByBudget } from "@/services/budget/expense-repository";
-import { toDateInputValue } from "@/lib/format";
+import { toDateInputValue } from "@/app/lib/format";
 import { ExpenseForm } from "./expense-form";
 
 export default async function NuevoGastoPage() {

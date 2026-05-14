@@ -1,7 +1,7 @@
 import "server-only";
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { env } from "@/lib/env";
+import { env } from "@/app/lib/env";
 import type { Mensaje } from "@/types/chat";
 import type { PayloadGrounding } from "@/types/scraper";
 

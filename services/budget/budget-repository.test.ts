@@ -13,7 +13,7 @@ vi.mock("@/lib/prisma", () => ({
   },
 }));
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/app/lib/prisma";
 import {
   listBudgetsByProfile,
   findBudgetById,
