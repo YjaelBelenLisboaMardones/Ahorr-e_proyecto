@@ -7,15 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { WithAuth } from "@/components/WithAuth";
 import { Navbar } from "@/components/Navbar";
 import { financeApi } from "@/lib/ahorre-api";
-
-type Transaction = {
-  id: string;
-  amount: string;
-  type: "INCOME" | "EXPENSE";
-  description: string | null;
-  date: string;
-  budgetId: string | null;
-};
+import { formatCLP, formatDate, getBudgetSpent, type Transaction } from "@/lib/finance-utils";
 
 type Budget = {
   id: string;
@@ -23,29 +15,6 @@ type Budget = {
   amount: string;
   period: "WEEKLY" | "MONTHLY" | "YEARLY";
 };
-
-function formatCLP(amount: string | number) {
-  return Number(amount).toLocaleString("es-CL", { style: "currency", currency: "CLP" });
-}
-
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("es-CL", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
-
-function getBudgetSpent(transactions: Transaction[], budgetId: string): number {
-  const now = new Date();
-  return transactions
-    .filter((t) => t.type === "EXPENSE" && t.budgetId === budgetId)
-    .filter((t) => {
-      const d = new Date(t.date);
-      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-    })
-    .reduce((s, t) => s + Number(t.amount), 0);
-}
 
 const inputClass =
   "bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all duration-300 text-slate-800";

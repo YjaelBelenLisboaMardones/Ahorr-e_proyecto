@@ -3,7 +3,7 @@ import { NotFoundError, AppError, ERROR_CODES, HTTP_STATUS } from "@ahorre/share
 import { transactionsRepository } from "../repositories";
 import type { CreateTransactionInput } from "../types";
 
-function getBudgetPeriodRange(period: string): { start: Date; end: Date } {
+export function getBudgetPeriodRange(period: string): { start: Date; end: Date } {
   const now = new Date();
   switch (period) {
     case "WEEKLY": {
