@@ -1,40 +1,26 @@
 {
-  "name": "mi-proyecto-ahorro",
+  "name": "ahorre-monorepo",
   "version": "0.1.0",
   "private": true,
+  "workspaces": ["apps/*", "packages/*"],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "postinstall": "prisma generate",
-    "db:push": "prisma db push",
-    "db:studio": "prisma studio",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
-  },
-  "dependencies": {
-    "@google/generative-ai": "^0.24.1",
-    "@prisma/client": "^6.19.3",
-    "@supabase/ssr": "^0.10.2",
-    "@supabase/supabase-js": "^2.105.3",
-    "next": "16.1.7",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "prisma:generate": "turbo run prisma:generate",
+    "prisma:migrate": "npx prisma migrate dev --schema=packages/database/prisma/schema.prisma",
+    "prisma:studio": "npx prisma studio --schema=packages/database/prisma/schema.prisma"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "turbo": "^2.5.3",
+    "typescript": "^5.8.2"
+  },
+  "overrides": {
     "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@vitest/coverage-v8": "^4.1.5",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.7",
-    "prisma": "^6.19.3",
-    "tailwindcss": "^4",
-    "typescript": "^5",
-    "vitest": "^4.1.5",
-    "vitest-mock-extended": "^4.0.0"
-  }
+    "@types/react-dom": "^19"
+  },
+  "engines": { "node": ">=20.0.0" },
+  "packageManager": "npm@10.0.0"
 }
